@@ -9,7 +9,8 @@ import java.util.HashMap;
 public class LC76 {
     public String minWindow(String s, String t) {
         // return solution1(s, t);
-        return solution2(s, t);
+        // return solution2(s, t);
+        return solution3(s, t);
     }
 
     // 目标串 字符统计
@@ -85,6 +86,9 @@ public class LC76 {
 
     /**
      * 双指针 + 哈希
+     *
+     * 判断字符个数
+     *
      * @param s
      * @param t
      * @return
@@ -135,6 +139,77 @@ public class LC76 {
                 }
                 if(have[chL] == need[chL]){
                     cnt--;
+                }
+                have[chL]--;
+                i++;
+            }
+        }
+
+        if(len != Integer.MAX_VALUE){
+            result = s.substring(start, end);
+        }
+
+        return result;
+    }
+
+    /**
+     * 双指针 + 哈希
+     *
+     * 判断字符种数
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    private String solution3(String s, String t){
+        int m = s.length();
+        int n = t.length();
+        if(m < n){
+            return "";
+        }
+
+        String result = "";
+
+        // 目标串 字符统计
+        int[] need = new int[128];
+        // 当前串(滑动窗口) 字符统计
+        int[] have = new int[128];
+        // 当前串与目标串 相差字符种数
+        int diff = 0;
+        for(char ch: t.toCharArray()){
+            if(need[ch] == 0){
+                diff++;
+            }
+            need[ch]++;
+        }
+
+        int len = Integer.MAX_VALUE;
+        int start = 0;
+        int end = 0;
+        char chL,chR;
+        // 双指针(毛毛虫) 头动尾随 | 双指针(可变滑动窗口)
+        for(int i=0,j=0; j<m; j++){
+            chR = s.charAt(j);
+            if(need[chR] == 0){
+                continue;
+            }
+            have[chR]++;
+            if(have[chR] == need[chR]){
+                diff--;
+            }
+            while(diff == 0){
+                if(j-i+1 < len){
+                    len = j-i+1;
+                    start = i;
+                    end = i+len;
+                }
+                chL = s.charAt(i);
+                if(need[chL] == 0){
+                    i++;
+                    continue;
+                }
+                if(have[chL] == need[chL]){
+                    diff++;
                 }
                 have[chL]--;
                 i++;
