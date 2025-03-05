@@ -199,7 +199,9 @@ public class LC3045 {
         for(String word: words){
             chs = word.toCharArray();
             n = chs.length;
-            // z函数
+            // z函数: 表示后缀word[i:]与word的最长公共前缀的长度
+            // z[i] = n−i  =>  word[i:]和与其等长的word的前缀相同
+            // bababa
             z = new int[n];
             int left = 0;
             int right = 0;
